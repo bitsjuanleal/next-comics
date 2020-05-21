@@ -1,0 +1,13 @@
+header {
+    min-height: 100px;
+    width: 100%;    
+    background-position: center;
+    background-size: cover;
+    display:table;
+}
+header h1 {
+    color: #ffffff;
+    display:table-cell; 
+    vertical-align:middle;    
+    padding-left: 30px;
+}

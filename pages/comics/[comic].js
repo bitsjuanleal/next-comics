@@ -6,14 +6,36 @@ import Marvel from "./marvel";
 import Dc from "./dc";
 import LinkTab from "../components/core/link-tab";
 
-export default function Home() {
+export default function Comic() {
+  /*const MarvelDynamic = dynamic(import("./marvel"), {
+    loading: () => <p>Loading marvel...</p>,
+  });
+  const DcDynamic = dynamic(import("./dc"), {
+    loading: () => <p>Loading dc...</p>,
+  });*/
+  var dataMarvel = {
+    page: <Marvel />,
+    label: "marvel",
+    imgHeader: "../public/images/marvel.svg",
+    title: "Marvel characters",
+    color: "#d40317",
+    fontColor: "#ffffff",
+  };
+  var dataDc = {
+    page: <Dc />,
+    label: "dc",
+    imgHeader: "../public/images/dc.svg",
+    title: "DC characters",
+    color: "#100055",
+    fontColor: "#ffffff",
+  };
+  const [defaultComic, setDefaultComic] = useState(dataMarvel);
+  const onClickTab = (comic) => {
+    var data = comic == "marvel" ? dataMarvel : dataDc;
+    setDefaultComic(data);
+  };
   return (
     <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
         <div className="tabs">
           <ol className="tab-list">
