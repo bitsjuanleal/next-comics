@@ -2,16 +2,17 @@
 import Character from "./character";
 // import "./styles/listcharacters.scss";
 
-const ListCharacters = (props) => {
-  const [charactersList, setCharacters] = useState([]);
+const ListCharacters = ({characters, comic}) => {
+  console.log('epaa',characters)
+  const [charactersList, setCharacters] = useState(characters);
   useEffect(() => {
-    setCharacters(props.characters);
+    setCharacters(characters);
     window.scrollTo(0, 0);
-  }, [props.characters]);
+  }, [characters]);
   return (
     <section className="cards-heroes">
       {charactersList.map((child, index) => {
-        return <Character key={index} type={props.comic} datacharater={child} />;
+        return <Character key={index} type={comic} datacharater={child} />;
       })}
     </section>
   );

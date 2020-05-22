@@ -1,24 +1,83 @@
-/*import ListCharacters from "./../components/list-characters";
-const Marvel = (props) => {
+import React, { useState, useContext, useEffect } from "react";
+import ListCharacters from "./../components/list-characters";
+import Search from "./../components/core/Search";
+import { getCharacters } from "./../components/data/characters";
+import { Context } from "./../components/hooks/initialState";
+
+/*export async function getInitialProps() {
+  const res = await fetch("http://localhost:4000/marvel");
+  const characters = await res.json();
+  return { props: { characters } };
+}*/
+
+const Marvel = ({ statusCode, characters }) => {
+  const { store, dispatch } = useContext(Context);
+
+  if (statusCode !== 200) {
+    return (
+      <div>
+        <h1>Oops</h1>
+        <p>Something has gone wrong</p>
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    dispatch({ tab: "marvel", detailUrl: store.detailUrl });
+  }, []);
+
+  const [charactersList, setCharactersList] = useState(characters);
+  const filterData = (value) => {
+    const excludeColumns = ["image", "url", "biography", "power"];
+    const lowercasedValue = value.toLowerCase().trim();
+    if (lowercasedValue === "" || lowercasedValue.length <= 2) {
+      setCharactersList(characters);
+    } else {
+      if (lowercasedValue.length > 2) {
+        const filteredData = characters.filter((item) => {
+          return Object.keys(item).some((key) =>
+            excludeColumns.includes(key)
+              ? false
+              : item[key].toString().toLowerCase().includes(lowercasedValue)
+          );
+        });
+        setCharactersList(filteredData);
+      }
+    }
+  };
   return (
     <section>
-      <div>Heroes de Marvel</div>
-      <ListCharacters characters={props.characters} comic={props.comic} />
+      <Search
+        placeholder="Search Marvel character"
+        color="#d40317"
+        borderColor="#d40317"
+        charactersList={charactersList}
+        onUpdateCharacters={(query) => filterData(query)}
+      />
+      <ListCharacters characters={charactersList} comic="marvel" />
     </section>
   );
 };
 
-Marvel.getInitialProps = async (ctx) => {
+/*Marvel.getInitialProps = async (ctx) => {
   const res = await fetch("http://localhost:4000/marvel");
   const json = await res.json();
   return { characters: json, comic: "marvel" };
+};*/
+Marvel.getInitialProps = async (ctx) => {
+  const { statusCode, characters } = await getCharacters("marvel");
+
+  return {
+    statusCode,
+    characters,
+  };
 };
+export default Marvel;
 
-export default Marvel;*/
-
-import React from "react";
+/*import React, { useContext } from "react";
 import ListCharacters from "./../components/list-characters";
-import Search from './../components/core/Search';
+import Search from "./../components/core/Search";
+import { Context } from "../components/hooks/initialState";
 
 class Marvel extends React.Component {
   static async getInitialProps(ctx) {
@@ -38,7 +97,7 @@ class Marvel extends React.Component {
     const excludeColumns = ["image", "url", "biography", "power"];
     const lowercasedValue = value.toLowerCase().trim();
     if (lowercasedValue === "" || lowercasedValue.length <= 2) {
-        this.setState({ charactersList: this.props.characters });
+      this.setState({ charactersList: this.props.characters });
     } else {
       if (lowercasedValue.length > 2) {
         const filteredData = this.props.characters.filter((item) => {
@@ -56,7 +115,6 @@ class Marvel extends React.Component {
   render() {
     return (
       <section>
-        <div>Personajes de Marvel</div>
         <Search
           placeholder="Search Marvel character"
           color="#d40317"
@@ -73,4 +131,4 @@ class Marvel extends React.Component {
   }
 }
 
-export default Marvel;
+export default Marvel;*/

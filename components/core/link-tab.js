@@ -1,14 +1,7 @@
-import React, { Component } from "react";
 // import PropTypes from "prop-types";
-import Link from "next/link";
+/*import Link from "next/link";
 
 class LinkTab extends Component {
-  /*static propTypes = {
-    activeTab: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    onClickParent: PropTypes.func.isRequired,
-    updateActiveTab: PropTypes.func.isRequired,
-  };*/
 
   constructor(props) {
     super(props);
@@ -18,11 +11,11 @@ class LinkTab extends Component {
   }
 
   onClick = () => {
-    const { label, eventclick } = this.props;
+    const { label } = this.props;
     this.setState({ activeTab: label });
-    if (eventclick != undefined) {
-      eventclick(label);
-    }
+    //if (eventclick != undefined) {
+    // eventclick(label);
+    //}
   };
 
   componentDidMount() {
@@ -43,11 +36,45 @@ class LinkTab extends Component {
     }
 
     return (
-      <a className={className} onClick={onClick}>
-        {label}
-      </a>
+      <LinkTab href={`/${label}`}>
+        <a className={className} onClick={onClick}>
+          {label}
+        </a>
+      </LinkTab>
     );
   }
 }
+
+export default LinkTab;*/
+import React, { useState, useContext, useEffect } from "react";
+import Link from "next/link";
+import { Context } from "./../../components/hooks/initialState";
+
+const LinkTab = (props) => {
+  const { store, dispatch } = useContext(Context);
+  const { label, eventclick, activeTab, urlTab } = props;
+  // const [activeTabItem, setActiveTabItem] = useState(activeTab);
+
+  const onClick = () => {
+    // setActiveTabItem(activeTab);
+    eventclick(label);
+  };
+  let className = "tab-list-item";
+  if (activeTab === label) {
+    className += " tab-list-active";
+  }
+  let urlRedirect = urlTab;
+  console.log(urlTab)
+  if (urlTab == "" || urlTab == undefined) {
+    urlRedirect = "/";
+  }
+  return (
+    <Link href={urlRedirect}>
+      <a className={className} onClick={onClick}>
+        {label}
+      </a>
+    </Link>
+  );
+};
 
 export default LinkTab;

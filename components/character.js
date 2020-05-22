@@ -2,6 +2,7 @@ import React from "react";
 // import './styles/character.scss';
 // import { Link } from 'react-router-dom';
 import Link from "next/link";
+import { Context } from "./hooks/initialState";
 
 function Character({ datacharater, type }) {
   const styleImg = {

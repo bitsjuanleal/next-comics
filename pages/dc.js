@@ -1,4 +1,4 @@
-import React from "react";
+/*import React, { useContext } from "react";
 import ListCharacters from "./../components/list-characters";
 import Search from "./../components/core/Search";
 
@@ -38,7 +38,6 @@ class Dc extends React.Component {
   render() {
     return (
       <section>
-        <div>Personajes de Marvel</div>
         <Search
           placeholder="Search DC character"
           color="#d40317"
@@ -55,4 +54,68 @@ class Dc extends React.Component {
   }
 }
 
+export default Dc;*/
+import React, { useState, useContext, useEffect } from "react";
+import ListCharacters from "./../components/list-characters";
+import Search from "./../components/core/Search";
+import { getCharacters } from "./../components/data/characters";
+import { Context } from "./../components/hooks/initialState";
+
+const Dc = ({ statusCode, characters }) => {
+  const { store, dispatch } = useContext(Context);
+
+  if (statusCode !== 200) {
+    return (
+      <div>
+        <h1>Oops</h1>
+        <p>Something has gone wrong</p>
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    dispatch({ tab: "dc", detailUrl: store.detailUrl });
+  }, []);
+
+  const [charactersList, setCharactersList] = useState(characters);
+  const filterData = (value) => {
+    const excludeColumns = ["image", "url", "biography", "power"];
+    const lowercasedValue = value.toLowerCase().trim();
+    if (lowercasedValue === "" || lowercasedValue.length <= 2) {
+      setCharactersList(characters);
+    } else {
+      if (lowercasedValue.length > 2) {
+        const filteredData = characters.filter((item) => {
+          return Object.keys(item).some((key) =>
+            excludeColumns.includes(key)
+              ? false
+              : item[key].toString().toLowerCase().includes(lowercasedValue)
+          );
+        });
+        setCharactersList(filteredData);
+      }
+    }
+  };
+  return (
+    <section>
+      <Search
+        placeholder="Search DC character"
+        color="#d40317"
+        borderColor="#d40317"
+        charactersList={charactersList}
+        onUpdateCharacters={(query) => filterData(query)}
+      />
+      <ListCharacters characters={charactersList} comic="dc" />
+    </section>
+  );
+};
+
+Dc.getInitialProps = async (ctx) => {
+  const { statusCode, characters } = await getCharacters("dc");
+
+  return {
+    statusCode,
+    characters,
+  };
+};
 export default Dc;

@@ -40,11 +40,105 @@ export async function getStaticProps({ params }) {
 
 //export default Detail;
 
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import Powers from "./../../../components/Powers";
+import { getCharacter } from "../../../components/data/character";
+import { Context } from "./../../../components/hooks/initialState";
 
-class Detail extends React.Component {
+const Detail = ({ statusCode, character, comic }) => {
+  const { store, dispatch } = useContext(Context);
+
+  if (statusCode !== 200) {
+    return (
+      <div>
+        <h1>Oops</h1>
+        <p>Something has gone wrong</p>
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    dispatch({
+      tab: "detail",
+      detailUrl: `/detail/${comic}/${character.name}`,
+    });
+  }, []);
+
+  const getDataComic = (comicName) => {
+    const configCardMarvel = {
+      background: "#ffd4d4",
+      repeatPowers: "repeat(3, 1fr)",
+    };
+    const configCardDc = {
+      background: "#e0ecf9",
+      repeatPowers: "repeat(2, 1fr)",
+    };
+    let data = configCardMarvel;
+    switch (comicName) {
+      case "dc":
+        data = configCardDc;
+        break;
+      case "detail":
+        data = configCardMarvel;
+        break;
+    }
+    return data;
+  };
+
+  const { background, repeatPowers } = getDataComic(comic);
+  const styleImg = {
+    backgroundColor: background,
+  };
+  const styleDiv = {
+    gridTemplateColumns: repeatPowers,
+  };
+
+  return (
+    <section className="detail-hero">
+      <h1>{character.name}</h1>
+      <div className="hero-profile">
+        <div className="hero-description">
+          <img src={character.image} alt="Avatar" style={styleImg} />
+        </div>
+        <div>
+          <h2>Skills</h2>
+          <div className="hero-powers" style={styleDiv}></div>
+          <Powers powers={character.powers} />
+        </div>
+      </div>
+      <div className="description">
+        <h2>BIOGRAPHY</h2>
+        {character.biography}
+      </div>
+      {character.url != undefined && (
+        <div className="url">
+          <Link href={`/${comic}`}>
+            <a className="alignleft">Back</a>
+          </Link>
+          <a href={character.url} target="_blank" className="alignright">
+            See more
+          </a>
+        </div>
+      )}
+    </section>
+  );
+};
+
+Detail.getInitialProps = async (ctx) => {
+  const { comic, name } = ctx.query;
+  const { statusCode, character } = await getCharacter(comic, name);
+
+  return {
+    statusCode,
+    character,
+    comic,
+  };
+};
+
+export default Detail;
+
+/*class Detail extends React.Component {
   static async getInitialProps(ctx) {
     const { comic, name } = ctx.query;
     const res = await fetch(`http://localhost:4000/${comic}?name=${name}`);
@@ -117,4 +211,4 @@ class Detail extends React.Component {
   }
 }
 
-export default Detail;
+export default Detail;*/

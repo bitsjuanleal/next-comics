@@ -4,6 +4,7 @@
 }*/
 body {
   background-color: rgb(14, 9, 9);
+  margin: 0;
 }
 
 body * {
@@ -47,4 +48,11 @@ body .tab-list li {
 }
 .alignright {
 	float: right;
+}
+
+h1 {
+  color: #ffffff;
+  display:table-cell; 
+  vertical-align:middle;    
+  padding-left: 30px;
 }
