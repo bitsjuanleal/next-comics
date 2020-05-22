@@ -64,16 +64,18 @@ const LinkTab = (props) => {
     className += " tab-list-active";
   }
   let urlRedirect = urlTab;
-  console.log(urlTab)
+  console.log(urlTab);
   if (urlTab == "" || urlTab == undefined) {
     urlRedirect = "/";
   }
   return (
-    <Link href={urlRedirect}>
-      <a className={className} onClick={onClick}>
-        {label}
-      </a>
-    </Link>
+    <li>
+      <Link href={urlRedirect}>
+        <a className={className} onClick={onClick}>
+          {label}
+        </a>
+      </Link>
+    </li>
   );
 };
 

@@ -3,7 +3,12 @@
   padding-left: 0;
 }
 
-.tab-list a {
+.tab-list li {  
+  display:inline;
+  padding: 10px;
+}
+
+.tab-list li a {
   text-decoration: none;
   color: white;
 }
@@ -27,7 +32,7 @@
   color: rgb(14, 9, 9) !important;
 }
 
-.tab-list a {
+.tab-list li a {
   font-size: 24px;
   cursor: pointer;
   text-transform: uppercase;

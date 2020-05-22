@@ -18,7 +18,9 @@ function Search(props) {
   return (
     <div className="wrap">
       <div className="search">
+        <label htmlFor="search-input"></label>
         <input
+          name="search-input"
           type="text"
           className="searchTerm"
           placeholder={placeholder}
