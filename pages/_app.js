@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from "react";
 import App from "next/app";
+import Head from "next/head";
 import Link from "next/link";
 import "../components/styles/base.scss";
 import Header from "./../components/core/Header";
@@ -22,6 +23,18 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Context.Provider value={{ store, dispatch }}>
+      <Head>
+        <title>Characters Marvel and DC comics</title>
+        <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="Description"
+          content="App de personajes de acción marvel y dc hecha en react con Nextjs."
+        ></meta>
+        <meta
+          name="Description"
+          content="Author: Juan Leal, desarrollador de Bits Americas"
+        ></meta>
+      </Head>
       <Header />
       <div className="tabs">
         <ol className="tab-list">
